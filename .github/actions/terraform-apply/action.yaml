@@ -4,7 +4,7 @@ inputs:
   aws_account_number:
     description: 'Account Number'
     required: true
-    default: '067408622363'
+    default: '339712836882'
   aws_role_name:
     description: 'Aws role with polices to deploy'
     required: true
