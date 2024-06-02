@@ -13,8 +13,7 @@ inputs:
 outputs:
   access_token:
     description: 'Generated GitHub Access Token'
-    value: ''
-
+    value: ${{ steps.generate-token.outputs.access_token }}'
 runs:
   using: composite
   steps:
@@ -24,7 +23,8 @@ runs:
     with:
       python-version: '3.x'
 
-  - name: Gerar Token de Acesso
+  - id: generate-token
+    name: Gerar Token de Acesso
     shell: bash
     env:
       PEM_KEY: ${{ inputs.pem_key }}
@@ -54,10 +54,8 @@ runs:
       else
         access_token=$(echo "$response" | jq -r .token)
         echo "Token de acesso gerado com sucesso: $access_token"
+        echo "access_token=$access_token" >> $GITHUB_OUTPUT
       fi
 
       # Remover chave privada
       rm private-key.pem
-
-      # Definir o output
-      echo "::set-output name=access_token::$access_token"
