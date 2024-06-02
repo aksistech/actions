@@ -31,6 +31,11 @@ runs:
   - name: Checkout code
     uses: actions/checkout@v4
 
+  - name: Print
+    shell: bash
+    run: |
+      echo "Region: ${{ inputs.aws_region }}"
+
   - name: configure aws credentials
     uses: aws-actions/configure-aws-credentials@v4
     with:
