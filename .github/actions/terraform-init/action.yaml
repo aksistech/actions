@@ -23,15 +23,6 @@ inputs:
     description: 'Directory containing Terraform files'
     required: false
     default: ''
-  github_app_id:
-    description: 'App Id'
-    required: true
-  github_installation_id:
-    description: 'Installation ID'
-    required: true
-  pem_key:
-    description: 'Private key'
-    required: true
 
 
 runs:
