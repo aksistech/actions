@@ -1,0 +1,35 @@
+name: 'Golang Build'
+description: 'Golang Build Applications'
+inputs:
+  go-version:
+    description: 'go version'
+    required: true
+    default: '^1.19'
+
+runs:
+  using: composite
+  steps:
+  - name: Checkout code
+    uses: actions/checkout@v4
+
+  - name: Set up Go
+    uses: actions/setup-go@v5
+    with:
+      go-version: ${{ inputs.go-version }}
+
+  - name: Clean mod cache
+    run: go clean --modcache
+    shell: bash
+
+  - name: Update Github token
+    shell: bash
+    run: |
+      git config --global url."https://x-access-token:${{ steps.get-token.outputs.token }}@github.com/".insteadOf "https://github.com/"
+      
+  - name: Tidy
+    shell: bash
+    run: go mod tidy
+
+  - name: Download dependencies
+    shell: bash
+    run: go mod download
