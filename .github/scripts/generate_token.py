@@ -2,6 +2,7 @@ import jwt
 import time
 import requests
 import os
+import sys
 
 app_id = os.environ['APP_ID']
 installation_id = os.environ['INSTALLATION_ID']
