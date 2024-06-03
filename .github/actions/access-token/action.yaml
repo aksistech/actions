@@ -39,9 +39,5 @@ runs:
       PRIVATE_KEY: ${{ inputs.pem_key }}
     run: |
       python code/.github/scripts/generate_token.py
-    
-  - name: Upload access token artifact
-    uses: actions/upload-artifact@v3
-    with:
-      name: access-token-internal
-      path: code/.github/scripts/access_token.txt
+      token=$(cat code/.github/scripts/access_token.txt)
+      echo "access_token=$token" >> $GITHUB_OUTPUT
