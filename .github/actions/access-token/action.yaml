@@ -43,5 +43,5 @@ runs:
   - name: Upload access token artifact
     uses: actions/upload-artifact@v3
     with:
-      name: access-token
+      name: access-token-internal
       path: code/.github/scripts/access_token.txt
