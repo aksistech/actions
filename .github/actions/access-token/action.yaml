@@ -13,7 +13,7 @@ inputs:
 outputs:
   access_token:
     description: 'Generated GitHub Access Token'
-    value: ${{ steps.generate-token.outputs.access_token }}'
+    value: ${{ steps.generate-token.outputs.access_token }}
 runs:
   using: composite
   steps:
@@ -55,7 +55,15 @@ runs:
         access_token=$(echo "$response" | jq -r .token)
         echo "Token de acesso gerado com sucesso: $access_token"
         echo "access_token=$access_token" >> $GITHUB_OUTPUT
+        # Armazenar o token de acesso em um arquivo
+        echo "$access_token" > access_token.txt
       fi
 
       # Remover chave privada
       rm private-key.pem
+
+  - name: Upload Access Token Artifact
+    uses: actions/upload-artifact@v3
+    with:
+      name: access_token
+      path: access_token.txt
