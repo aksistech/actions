@@ -31,6 +31,12 @@ runs:
       repository: 'aksistech/actions'
       path: scripts
 
+  - name: Check files
+    shell: bash
+    run: |
+      ls -ltra
+      tree
+
   - name: Generate JWT and get access token
     shell: bash
     env:
