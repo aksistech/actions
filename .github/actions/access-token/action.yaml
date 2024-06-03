@@ -25,4 +25,4 @@ runs:
       APP_ID: ${{ inputs.github_app_id }}
       INSTALLATION_ID: ${{ inputs.github_installation_id }}
       PRIVATE_KEY: ${{ inputs.pem_key }}
-    run: python code/.github/scripts/generate_token.py/generate_token.py
+    run: python code/.github/scripts/generate_token.py
