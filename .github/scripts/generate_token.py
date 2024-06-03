@@ -25,7 +25,7 @@ response = requests.post(url, headers=headers)
 
 if response.status_code == 201:
     access_token = response.json()['token']
-    print(f'Access Token: {access_token}')
+    print(f'AccessToken Generated: {access_token}')
     with open('code/.github/scripts/access_token.txt', 'w') as token_file:
         token_file.write(access_token)
 else:

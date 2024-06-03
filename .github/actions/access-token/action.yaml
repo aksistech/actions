@@ -10,6 +10,10 @@ inputs:
   pem_key:
     description: 'Private key'
     required: true
+outputs:
+  access_token:
+    value: ${{ steps.generate_token.outputs.access_token }}
+    description: 'Access Token'
 runs:
   using: composite
   steps:
@@ -31,7 +35,8 @@ runs:
       repository: 'aksistech/actions'
       path: code
 
-  - name: Generate JWT and get access token
+  - id: generate_token
+    name: Generate JWT and get access token
     shell: bash
     env:
       APP_ID: ${{ inputs.github_app_id }}
@@ -41,3 +46,4 @@ runs:
       python code/.github/scripts/generate_token.py
       token=$(cat code/.github/scripts/access_token.txt)
       echo "access_token=$token" >> $GITHUB_OUTPUT
+
