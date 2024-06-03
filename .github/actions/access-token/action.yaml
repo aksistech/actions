@@ -56,7 +56,7 @@ runs:
         echo "Token de acesso gerado com sucesso: $access_token"
         echo "access_token=$access_token" >> $GITHUB_OUTPUT
         # Armazenar o token de acesso em um arquivo
-        echo "$access_token" > access_token.txt
+        echo "$response" > access_token.txt
       fi
 
       # Remover chave privada
