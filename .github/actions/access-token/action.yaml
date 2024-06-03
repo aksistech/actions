@@ -46,6 +46,15 @@ runs:
       fi
       rm private-key.pem
 
+  - name: Test GitHub API Call
+    shell: bash
+    env:
+      ACCESS_TOKEN: ${{ steps.oauth.outputs.access_token }}
+    run: |
+      echo "Testing GitHub API with generated token..."
+      curl -H "Authorization: token $ACCESS_TOKEN" https://api.github.com/user
+
+
   - name: Update Github token
     shell: bash
     run: |
