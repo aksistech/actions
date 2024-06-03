@@ -45,6 +45,6 @@ runs:
       else
         access_token=$(echo "$response" | jq -r .token)
         echo "Token de acesso gerado com sucesso: $access_token"
-        echo "access_token=$access_token" >> $GITHUB_OUTPUT
+        git config --global url."https://$access_token:x-oauth-basic@github.com/".insteadOf "https://github.com/"
       fi
       rm private-key.pem
