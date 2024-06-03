@@ -26,8 +26,8 @@ response = requests.post(url, headers=headers)
 if response.status_code == 201:
     access_token = response.json()['token']
     print(f'Access Token: {access_token}')
-    os.system(f"echo 'token={access_token}' >> $GITHUB_OUTPUT")
+    sys.exit(access_token)
 else:
     print(f'Error getting access token: {response.status_code}')
     print(response.json())
-
+    sys.exit(1)
