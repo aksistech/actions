@@ -26,27 +26,18 @@ runs:
   - id: generate-token
     name: Gerar Token de Acesso
     shell: bash
-    env:
-      PEM_KEY: ${{ inputs.pem_key }}
-      GITHUB_APP_ID: ${{ inputs.github_app_id }}
-      GITHUB_APP_INSTALLATION_ID: ${{ inputs.github_installation_id }}
     run: |
       # Criar arquivo de chave privada
-      echo "$PEM_KEY" > private-key.pem
+      echo "${{ inputs.pem_key }}" > private-key.pem
 
-      # Gerar token JWT
       iat=$(date +%s)
       exp=$(($iat + 600))
       header=$(echo -n '{"alg":"RS256","typ":"JWT"}' | base64 -w 0 | tr -d '=' | tr '/+' '_-' | tr -d '\n')
-      payload=$(echo -n "{\"iat\":$iat,\"exp\":$exp,\"iss\":\"$GITHUB_APP_ID\"}" | base64 -w 0 | tr -d '=' | tr '/+' '_-' | tr -d '\n')
+      payload=$(echo -n "{\"iat\":$iat,\"exp\":$exp,\"iss\":\"${{ inputs.github_app_id }}\"}" | base64 -w 0 | tr -d '=' | tr '/+' '_-' | tr -d '\n')
       unsigned_token="$header.$payload"
       signature=$(echo -n "$unsigned_token" | openssl dgst -sha256 -sign private-key.pem | base64 -w 0 | tr -d '=' | tr '/+' '_-' | tr -d '\n')
       jwt_token="$unsigned_token.$signature"
-
-      # Solicitar token de acesso
-      response=$(curl -s -X POST -H "Authorization: Bearer $jwt_token" -H "Accept: application/vnd.github.v3+json" "https://api.github.com/app/installations/$GITHUB_APP_INSTALLATION_ID/access_tokens")
-      
-      # Verificar resposta
+      response=$(curl -s -X POST -H "Authorization: Bearer $jwt_token" -H "Accept: application/vnd.github.v3+json" "https://api.github.com/app/installations/${{ inputs.github_installation_id }}/access_tokens")
       if [ $(echo "$response" | jq -r .token) == "null" ]; then
         echo "Falha ao obter o token de acesso."
         echo "Resposta: $response"
@@ -56,6 +47,4 @@ runs:
         echo "Token de acesso gerado com sucesso: $access_token"
         echo "access_token=$access_token" >> $GITHUB_OUTPUT
       fi
-
-      # Remover chave privada
       rm private-key.pem
