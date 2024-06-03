@@ -38,9 +38,3 @@ runs:
       INSTALLATION_ID: ${{ inputs.github_installation_id }}
       PRIVATE_KEY: ${{ inputs.pem_key }}
     run: python code/.github/scripts/generate_token.py
-
-  - name: Upload access token artifact
-    uses: actions/upload-artifact@v3
-    with:
-      name: access-token
-      path: access_token.txt
