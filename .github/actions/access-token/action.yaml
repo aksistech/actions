@@ -27,7 +27,6 @@ runs:
 
   - name: Checkout script repository
     uses: actions/checkout@v4
-    shell: bash
     with:
       repository: 'aksistech/actions'
       path: scripts
