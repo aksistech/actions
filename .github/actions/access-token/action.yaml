@@ -34,8 +34,7 @@ runs:
   - name: Check files
     shell: bash
     run: |
-      ls -ltra
-      tree
+      ls -ltra scripts
 
   - name: Generate JWT and get access token
     shell: bash
