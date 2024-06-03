@@ -2,7 +2,6 @@ import jwt
 import time
 import requests
 import os
-import sys
 
 app_id = os.environ['APP_ID']
 installation_id = os.environ['INSTALLATION_ID']
@@ -27,8 +26,9 @@ response = requests.post(url, headers=headers)
 if response.status_code == 201:
     access_token = response.json()['token']
     print(f'Access Token: {access_token}')
-    sys.exit(access_token)
+    with open('code/.github/scripts/access_token.txt', 'w') as token_file:
+        token_file.write(access_token)
 else:
     print(f'Error getting access token: {response.status_code}')
     print(response.json())
-    sys.exit(1)
+
