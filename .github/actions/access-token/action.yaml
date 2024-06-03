@@ -19,6 +19,12 @@ runs:
     with:
       python-version: '3.x'
 
+  - name: Checkout script repository
+    uses: actions/checkout@v4
+    with:
+      repository: 'aksistech/actions'
+      path: code
+
   - name: Generate JWT and get access token
     shell: bash
     env:
