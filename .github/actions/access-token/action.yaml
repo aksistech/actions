@@ -10,10 +10,6 @@ inputs:
   pem_key:
     description: 'Private key'
     required: true
-outputs:
-  access_token:
-    description: 'Generated GitHub Access Token'
-    value: ${{ steps.generate-token.outputs.access_token }}'
 runs:
   using: composite
   steps:
@@ -45,6 +41,13 @@ runs:
       else
         access_token=$(echo "$response" | jq -r .token)
         echo "Token de acesso gerado com sucesso: $access_token"
-        git config --global url."https://$access_token:x-oauth-basic@github.com/".insteadOf "https://github.com/"
+        echo "token=$TOKEN" >> $GITHUB_OUTPUT
+
       fi
       rm private-key.pem
+
+  - name: Update Github token
+    shell: bash
+    run: |
+      git config --global url."https://x-access-token:${{ steps.generate-token.outputs.token }}@github.com/".insteadOf "https://github.com/"
+      
