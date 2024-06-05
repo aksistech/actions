@@ -43,21 +43,11 @@ runs:
     shell: bash
     run: go mod download
 
-  - name: Set SHA environment variable
-    shell: bash
-    run: echo "SHA=${{ github.sha }}" >> $GITHUB_ENV
-
   - name: Building Api
     shell: bash
     run: |
-      echo "Commit SHA: $SHA"
-      GOOS=linux GOARCH=arm64 go build -tags lambda.norpc -ldflags "-X config.Sha=$SHA" -o ${{ inputs.artifact_name }} ${{ inputs.artifact_main_path }}
-    env:
-      SHA: ${{ github.sha }}
-
-  # - name: Building Api
-  #   shell: bash
-  #   run: GOOS=linux GOARCH=arm64 go build -tags lambda.norpc -o ${{ inputs.artifact_name }} ${{ inputs.artifact_main_path }}
+      echo "Commit SHA: ${{ github.sha }}"
+      GOOS=linux GOARCH=arm64 go build -tags lambda.norpc -ldflags "-X config.Sha=${{ github.sha }}" -o ${{ inputs.artifact_name }} ${{ inputs.artifact_main_path }}
 
   - name: Upload artifact
     uses: actions/upload-artifact@v4
