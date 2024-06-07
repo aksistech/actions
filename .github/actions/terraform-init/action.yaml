@@ -74,7 +74,7 @@ runs:
     if: ${{ inputs.terraform_directory != '' }} # Executa apenas se terraform_directory não estiver vazio
     uses: actions/upload-artifact@v4
     with:
-      name: ${{ artifact_name }}
+      name: ${{ inputs.artifact_name }}
       path: |
         ${{ inputs.terraform_directory }}
         ${{ inputs.terraform_directory }}/.terraform
