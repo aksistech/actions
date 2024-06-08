@@ -12,7 +12,8 @@ def get_ec2_instances_by_tags(tags):
     instances = []
     for reservation in response['Reservations']:
         for instance in reservation['Instances']:
-            instances.append(instance)
+            if instance['State']['Name'] == 'running':
+                instances.append(instance)
 
     return instances
 
@@ -27,6 +28,7 @@ tags = {
     'JumpBox': 'true',
     'Vpc': os.environ['VPC_NAME'],
 }
+
 instances = get_ec2_instances_by_tags(tags)
 result = {'instances': instances}
 with open('ec2_instances.json', 'w') as json_file:
