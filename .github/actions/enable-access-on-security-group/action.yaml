@@ -1,0 +1,60 @@
+name: 'Access Token'
+description: 'Generate Github Access Token By app'
+inputs:
+  aws_region:
+    description: "Aws region"
+    required: true
+  key:
+    description: "Key comments"
+    required: true
+  tag_key:
+    description: "tag name to search"
+    required: true
+  tag_value:
+    description: "tag value to search"
+    required: true
+runs:
+  using: composite
+  steps:
+
+  - name: Configurar Python
+    uses: actions/setup-python@v5
+    with:
+      python-version: '3.x'
+
+  - name: Install dependencies
+    shell: bash
+    run: |
+      python -m pip install --upgrade pip
+      pip install boto3
+
+  - name: Checkout script repository
+    uses: actions/checkout@v4
+    with:
+      repository: 'aksistech/actions'
+      path: code
+
+  - name: Obter IP Público do Runner
+    id: get-ip
+    shell: bash
+    run: |
+      echo "runner_ip=$(curl -s http://checkip.amazonaws.com)" >> $GITHUB_OUTPUT
+
+  - name: Configurar Python
+    uses: actions/setup-python@v5
+    with:
+      python-version: '3.x'
+
+  - id: generate_token
+    name: Generate JWT and get access token
+    shell: bash
+    env:
+      REGION: ${{ inputs.aws_region }}
+      KEY: ${{ inputs.key }}
+      TAG_KEY: ${{ inputs.tag_key }}
+      TAG_VALUE: ${{ inputs.tag_value }}
+    run: |
+      for ip in $RUNNER_IP; do
+        python code/.github/scripts/enable-ip-on-security-group.py ${ip}/32
+      done
+
