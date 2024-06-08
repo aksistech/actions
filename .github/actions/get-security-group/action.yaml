@@ -51,7 +51,7 @@ runs:
     name: Get Security Group
     shell: bash
     env:
-      NAME: "${{ var.name }}"
+      NAME: "${{ inputs.name }}"
       VPC_NAME: "${{ inputs.vpc_name }}"
     run: |
       python code/.github/scripts/loading-jumpbox-security-group-by-tags.py
