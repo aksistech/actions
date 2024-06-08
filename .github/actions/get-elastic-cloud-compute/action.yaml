@@ -51,7 +51,7 @@ runs:
     name: Get Ec2 Name
     shell: bash
     env:
-      NAME: "${{ var.name }}"
+      NAME: "${{ inputs.name }}"
       VPC_NAME: "${{ inputs.vpc_name }}"
     run: |
       python code/.github/scripts/loading-jumpbox-ec2-by-tags.py
