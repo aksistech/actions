@@ -1,0 +1,61 @@
+name: 'Get Security Group'
+description: 'Security group sdk'
+inputs:
+  aws_account_number:
+    description: 'Account Number'
+    required: true
+  aws_role_name:
+    description: 'Aws role with polices to deploy'
+    required: true
+    default: 'github-actions'
+  aws_region:
+    description: 'Aws region'
+    required: true
+  vpc_name:
+    description: 'Aws vpc name'
+    required: true
+  name:
+    description: 'Name'
+    required: true
+
+runs:
+  using: composite
+  steps:
+
+  - name: configure aws credentials
+    uses: aws-actions/configure-aws-credentials@v4
+    with:
+      role-to-assume: arn:aws:iam::${{ inputs.aws_account_number }}:role/${{ inputs.aws_role_name }}
+      role-session-name: ${{ inputs.aws_role_name }}
+      aws-region: ${{ inputs.aws_region }}
+
+
+  - name: Configurar Python
+    uses: actions/setup-python@v5
+    with:
+      python-version: '3.x'
+
+  - name: Install dependencies
+    shell: bash
+    run: |
+      python -m pip install --upgrade pip
+      pip install boto3
+
+  - name: Checkout script repository
+    uses: actions/checkout@v4
+    with:
+      repository: 'aksistech/actions'
+      path: code
+
+  - id: sdk
+    name: Get Security Group
+    shell: bash
+    env:
+      NAME: "${{ var.name }}"
+      VPC_NAME: "${{ inputs.vpc_name }}"
+    run: |
+      python code/.github/scripts/loading-jumpbox-security-group-by-tags.py
+      ls -ltra
+#      token=$(cat code/.github/scripts/access_token.txt)
+#      echo "access_token=$token" >> $GITHUB_OUTPUT
+
