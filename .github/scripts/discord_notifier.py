@@ -27,22 +27,22 @@ default_fields = [
     {
         "name": "Repository",
         "value": repository_name,
-        "inline": "false",
+        "inline": False,
     },
     {
         "name": "Workflow",
         "value": workflow_name,
-        "inline": "true",
+        "inline": True,
     },
     {
         "name": "Ref",
         "value": branch_selected,
-        "inline": "true",
+        "inline": True,
     },
     {
         "name": "Build",
         "value": build_number,
-        "inline": "true",
+        "inline": True,
     }
 ]
 
@@ -50,6 +50,10 @@ default_fields = [
 if fields_str:
     try:
         additional_fields = json.loads(fields_str)
+        # Convert inline field to boolean if it is string
+        for field in additional_fields:
+            if isinstance(field.get("inline"), str):
+                field["inline"] = field["inline"].lower() == "true"
     except json.JSONDecodeError as e:
         print(f"Erro ao decodificar JSON: {e}")
         print(f"String JSON recebida: {fields_str}")
