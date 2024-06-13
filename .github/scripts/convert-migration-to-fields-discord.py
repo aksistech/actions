@@ -3,6 +3,7 @@ import json
 
 # Lê o caminho do JSON a partir da variável de ambiente
 json_path = os.getenv('JSON_PATH')
+output_path = os.getenv('OUTPUT_PATH', 'additional_fields.json')
 
 if not json_path or not os.path.exists(json_path):
     raise ValueError("JSON_PATH is not set or the file does not exist")
@@ -39,7 +40,7 @@ for i, migration in enumerate(data.get('migrations', [])):
     })
 
 # Converte os campos em uma string JSON
-fields_json = json.dumps(fields)
+with open(output_path, 'w') as outfile:
+    json.dump(fields, outfile, indent=4)
 
-# Salva a string JSON em uma variável de ambiente
-print(f"::set-output name=fields::{fields_json}")
+print(f"Additional fields saved to {output_path}")
