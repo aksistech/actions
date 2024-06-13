@@ -3,7 +3,8 @@ description: 'Discord message webhook'
 inputs:
   title:
     description: 'Title'
-    required: true
+    required: false
+    default: 'Github Actions'
   description:
     description: 'Description'
     required: true
