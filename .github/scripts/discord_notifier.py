@@ -46,8 +46,17 @@ default_fields = [
     }
 ]
 
-# Concatenação de campos adicionais fornecidos
-additional_fields = json.loads(fields_str) if fields_str else []
+# Verificar se fields_str é uma string JSON válida
+if fields_str:
+    try:
+        additional_fields = json.loads(fields_str)
+    except json.JSONDecodeError as e:
+        print(f"Erro ao decodificar JSON: {e}")
+        print(f"String JSON recebida: {fields_str}")
+        additional_fields = []
+else:
+    additional_fields = []
+
 all_fields = default_fields + additional_fields
 
 if not webhook_url:
