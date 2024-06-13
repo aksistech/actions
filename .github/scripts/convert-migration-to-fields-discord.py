@@ -31,7 +31,7 @@ def add_field(name, value, inline):
             "inline": inline
         })
 
-add_field("Status", data.get('success'), True)
+add_field("Success", data.get('success'), True)
 add_field("TargetVersion", data.get('targetSchemaVersion'), True)
 add_field("Executions", data.get('migrationsExecuted'), True)
 
