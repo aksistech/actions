@@ -32,11 +32,6 @@ runs:
       role-session-name: ${{ inputs.aws_role_name }}
       aws-region: ${{ inputs.aws_region }}
 
-  - name: Download Artifact
-    uses: actions/download-artifact@v4
-    with:
-      name: ${{ inputs.artifact_name }}
-
   - name: Set permissions for Terraform providers
     shell: bash
     run: chmod -R +x .
