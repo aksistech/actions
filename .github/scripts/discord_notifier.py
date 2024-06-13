@@ -8,6 +8,7 @@ title = os.getenv('TITLE')
 description = os.getenv('DESCRIPTION')
 fields_str = os.getenv('FIELDS')
 severity = os.getenv('COLOR')
+files_str = os.getenv('FILES')  # Variável de ambiente para os caminhos dos arquivos (separados por vírgula)
 
 repository_name = os.getenv("REPOSITORY_NAME")
 workflow_name = os.getenv("WORKFLOW_NAME")
@@ -53,7 +54,7 @@ all_fields = default_fields + additional_fields
 if not webhook_url:
     raise ValueError("DISCORD_WEBHOOK_URL is not set")
 
-def send_discord_notification(webhook, message_title, desc, fields_list, severity_color):
+def send_discord_notification(webhook, message_title, desc, fields_list, severity_color, file_paths):
     embed = {
         "title": message_title,
         "description": desc,
@@ -69,9 +70,16 @@ def send_discord_notification(webhook, message_title, desc, fields_list, severit
         "Content-Type": "application/json"
     }
 
-    response = requests.post(webhook, headers=headers, data=json.dumps(data))
+    files = []
+    if file_paths:
+        for i, file_path in enumerate(file_paths):
+            if file_path:  # Evita anexar arquivos vazios
+                files.append(('file', (f'file_{i}', open(file_path, 'rb'))))
+
+    response = requests.post(webhook, headers=headers, data=json.dumps(data), files=files)
 
     if response.status_code != 204:
         raise Exception(f"Failed to send notification. Status code: {response.status_code}, Response: {response.text}")
 
-send_discord_notification(webhook_url, title, description, all_fields, color)
+file_paths = files_str.split(',') if files_str else []
+send_discord_notification(webhook_url, title, description, all_fields, color, file_paths)
