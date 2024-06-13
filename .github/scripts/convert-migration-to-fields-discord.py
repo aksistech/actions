@@ -15,7 +15,7 @@ with open(json_path, 'r') as file:
 fields = [
     {
         "name": "Status",
-        "value": data['success'],
+        "value": str(data['success']),
         "inline": "true"
     },
     {
@@ -25,7 +25,7 @@ fields = [
     },
     {
         "name": "Executions",
-        "value": data['migrationsExecuted'],
+        "value": str(data['migrationsExecuted']),
         "inline": "true"
     }
 ]
@@ -38,10 +38,8 @@ for i, migration in enumerate(data.get('migrations', [])):
         "inline": "false"
     })
 
-# Salva o resultado em um novo arquivo JSON
-output_path = os.getenv('OUTPUT_PATH', 'output_fields.json')
+# Converte os campos em uma string JSON
+fields_json = json.dumps(fields)
 
-with open(output_path, 'w') as outfile:
-    json.dump(fields, outfile, indent=4)
-
-print(f"Fields successfully saved to {output_path}")
+# Salva a string JSON em uma variável de ambiente
+print(f"::set-output name=fields::{fields_json}")
