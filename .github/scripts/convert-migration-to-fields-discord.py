@@ -38,19 +38,21 @@ additional_fields = [
     }
 ]
 
-# Adiciona as migrações ao array de additional_fields
-for i, migration in enumerate(data.get('migrations', [])):
-    additional_fields.append({
-        "name": f"Migration {i+1}",
-        "value": f"{migration['version']} - {migration['description']}",
-        "inline": "false"
-    })
+# Adiciona as migrações ao array de additional_fields, somente se o valor não for null
+if data.get('migrations'):
+    for i, migration in enumerate(data['migrations']):
+        if migration['version'] and migration['description']:
+            additional_fields.append({
+                "name": f"Migration {i+1}",
+                "value": f"{migration['version']} - {migration['description']}",
+                "inline": "false"
+            })
 
 # Combina os parâmetros com os campos adicionais, garantindo que os parâmetros venham primeiro
 combined_fields = parameters + additional_fields
 
-# Converte os campos combinados em uma string JSON
+# Salva os campos combinados em uma única linha de JSON
 with open(output_path, 'w') as outfile:
-    json.dump(combined_fields, outfile, indent=4)
+    json.dump(combined_fields, outfile)
 
 print(f"Combined fields saved to {output_path}")
