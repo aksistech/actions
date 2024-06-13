@@ -19,10 +19,6 @@ inputs:
     description: 'Json Fields'
     required: true
     default: '[]'
-  files:
-    description: 'Comma-separated list of file paths to attach'
-    required: false
-    default: ''
 runs:
   using: composite
   steps:
@@ -56,5 +52,5 @@ runs:
       WORKFLOW_NAME: "${{ github.workflow }}"
       GITHUB_REF_NAME: "${{ github.ref_name }}"
       WORKFLOW_BUILD: "${{ github.run_number }}"
-      FILES: "${{ inputs.files }}"
     run: python code/.github/scripts/discord_notifier.py
+
