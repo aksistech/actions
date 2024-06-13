@@ -12,8 +12,15 @@ if not json_path or not os.path.exists(json_path):
 with open(json_path, 'r') as file:
     data = json.load(file)
 
+# Lê os parâmetros fornecidos como entrada
+parameters = os.getenv('INPUT_PARAMETERS')
+if parameters:
+    parameters = json.loads(parameters)
+else:
+    parameters = []
+
 # Campos adicionais a serem adicionados
-fields = [
+additional_fields = [
     {
         "name": "Status",
         "value": str(data['success']),
@@ -31,16 +38,19 @@ fields = [
     }
 ]
 
-# Adiciona as migrações ao array de fields
+# Adiciona as migrações ao array de additional_fields
 for i, migration in enumerate(data.get('migrations', [])):
-    fields.append({
+    additional_fields.append({
         "name": f"Migration {i+1}",
         "value": f"{migration['version']} - {migration['description']}",
         "inline": "false"
     })
 
-# Converte os campos em uma string JSON
-with open(output_path, 'w') as outfile:
-    json.dump(fields, outfile, indent=4)
+# Combina os parâmetros com os campos adicionais, garantindo que os parâmetros venham primeiro
+combined_fields = parameters + additional_fields
 
-print(f"Additional fields saved to {output_path}")
+# Converte os campos combinados em uma string JSON
+with open(output_path, 'w') as outfile:
+    json.dump(combined_fields, outfile, indent=4)
+
+print(f"Combined fields saved to {output_path}")

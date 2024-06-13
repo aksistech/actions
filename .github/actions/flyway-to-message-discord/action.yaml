@@ -4,7 +4,9 @@ inputs:
   json_path:
     description: 'Json Flyway Path'
     required: false
-
+  parameters:
+    description: 'Parameters'
+    required: false
 runs:
   using: composite
   steps:
@@ -29,6 +31,7 @@ runs:
   - name: Convert
     shell: bash
     env:
+      INPUT_PARAMETERS: "${{ inputs.parameters }}"
       JSON_PATH: "${{ inputs.json_path }}"
     run: python code/.github/scripts/convert-migration-to-fields-discord.py
 
