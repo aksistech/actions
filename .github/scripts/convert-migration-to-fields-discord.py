@@ -20,23 +20,20 @@ else:
     parameters = []
 
 # Campos adicionais a serem adicionados
-additional_fields = [
-    {
-        "name": "Status",
-        "value": str(data['success']),
-        "inline": "true"
-    },
-    {
-        "name": "TargetVersion",
-        "value": data['targetSchemaVersion'],
-        "inline": "true"
-    },
-    {
-        "name": "Executions",
-        "value": str(data['migrationsExecuted']),
-        "inline": "true"
-    }
-]
+additional_fields = []
+
+# Função para adicionar campos apenas se o valor não for None
+def add_field(name, value, inline):
+    if value is not None:
+        additional_fields.append({
+            "name": name,
+            "value": str(value),
+            "inline": inline
+        })
+
+add_field("Status", data.get('success'), True)
+add_field("TargetVersion", data.get('targetSchemaVersion'), True)
+add_field("Executions", data.get('migrationsExecuted'), True)
 
 # Adiciona as migrações ao array de additional_fields, somente se o valor não for null
 if data.get('migrations'):
@@ -45,7 +42,7 @@ if data.get('migrations'):
             additional_fields.append({
                 "name": f"Migration {i+1}",
                 "value": f"{migration['version']} - {migration['description']}",
-                "inline": "false"
+                "inline": False
             })
 
 # Combina os parâmetros com os campos adicionais, garantindo que os parâmetros venham primeiro
