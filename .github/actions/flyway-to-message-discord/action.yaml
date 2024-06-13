@@ -26,7 +26,7 @@ runs:
       repository: 'aksistech/actions'
       path: code
 
-  - name: Send message
+  - name: Convert
     shell: bash
     env:
       JSON_PATH: "${{ inputs.json_path }}"
